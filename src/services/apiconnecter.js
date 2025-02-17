@@ -4,7 +4,7 @@ import axios from "axios";
 export const axiosinstance = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://mashupsbackand.vercel.app/api/"
+      ? "https://backand-js.vercel.app/api/"
       : "http://localhost:4001/api/",
   // Do not set Content-Type here; let each request set it as needed.
 });
