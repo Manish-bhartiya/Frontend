@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaRegHeart, FaHeart } from "react-icons/fa"; // Updated import
 
 import { setSongs, setCurrentSongIndex, togglePlayPause } from "../features/audioSlice";
-import { apiconnecter } from "../services/apiconnecter";
+import  apiconnecter  from "../services/apiconnecter";
 
 const FavoriteSongs = () => {
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);

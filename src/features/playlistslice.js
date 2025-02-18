@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { apiconnecter } from '../services/apiconnecter';
+import  apiconnecter  from '../services/apiconnecter';
 
 export const fetchPlaylist = createAsyncThunk('playlists/fetchPlaylist', async () => {
   try {

@@ -28,20 +28,16 @@ const ProgressBar = ({
     audioRef.current.currentTime = (clickX / width) * duration;
   };
 
+  
   return (
-    <div className="flex-grow mx-4  flex items-center space-x-2">
-            {/* Current Time */}
-            <span className="text-xs text-gray-300">{formatTime(currentTime)}</span>
-
-            {/* Progress Bar */}
-            <div className="relative w-full h-1 bg-gray-500 rounded-full cursor-pointer" onClick={handleProgressClick}>
-              <div className="absolute top-0 left-0 h-full bg-emerald-400 rounded-full" style={{ width: `${progress}%` }}></div>
-            </div>
-
-            {/* Duration */}
-            <span className="text-xs text-gray-300">{formatTime(duration)}</span>
-          </div>
-  );
+    <div className="flex-grow mx-4 flex items-center space-x-2">
+        <span className="text-xs text-gray-300">{formatTime(currentTime)}</span>
+        <div className="relative w-full h-1 bg-gray-500 rounded-full cursor-pointer" onClick={handleProgressClick}>
+            <div className="absolute top-0 left-0 h-full bg-emerald-400 rounded-full" style={{ width: `${progress}%` }}></div>
+        </div>
+        <span className="text-xs text-gray-300">{formatTime(duration)}</span>
+    </div>
+);
 };
 
 export default ProgressBar;

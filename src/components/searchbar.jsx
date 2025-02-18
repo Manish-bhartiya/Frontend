@@ -35,7 +35,7 @@
 
     return (
       <form onSubmit={handleSubmit} className="relative flex items-center w-full max-w-md">
-        <IoSearchOutline className="absolute left-3 text-gray-500 w-5 h-5" />
+        <IoSearchOutline className="absolute left-3 text-gray-500  w-5 h-5" />
         <input
           type="text"
           value={term}

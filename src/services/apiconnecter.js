@@ -10,7 +10,7 @@ export const axiosinstance = axios.create({
 });
 
 // Utility function for API calls
-export const apiconnecter = (
+ const apiconnecter = (
   method,
   url,
   bodydata = null,
@@ -44,3 +44,5 @@ export const apiconnecter = (
 // formData.append("artist", "Artist Name");
 // formData.append("file", selectedFile);
 // apiconnecter("post", "songs/createsongs", formData);
+
+export default apiconnecter;

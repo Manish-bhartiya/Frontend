@@ -51,7 +51,7 @@ const Navbar = () => {
 
   const navItems = (
     <>
-      <li className="p-2">
+      <li className="p-2 border-white">
         <Link to="/">Home</Link>
       </li>
       <li className="p-2">

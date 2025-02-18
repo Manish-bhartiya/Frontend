@@ -1,6 +1,6 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { apiconnecter } from "../services/apiconnecter";
+import  apiconnecter  from "../services/apiconnecter";
 
 export const fetchResults = createAsyncThunk('search/fetchSearchResults', async (term) => {
     try {

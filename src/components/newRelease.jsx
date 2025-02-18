@@ -7,7 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import AlbumRootSkeleton from "../components/AlbumRootSkeleton";
 import ReleaseCard from "../components/ReleaseCard";
-import { apiconnecter } from "../services/apiconnecter";
+import  apiconnecter from "../services/apiconnecter";
 
 const NewReleasesSlider = () => {
   const query = useSelector((state) => state.User.query);
