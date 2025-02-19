@@ -146,7 +146,7 @@ const PlaylistSongs = ({ playlistName }) => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4">
+    <div className="min-h-screen mt-16 bg-black text-white px-4">
       <button
         onClick={() => navigate("/")}
         className="mb-4 text-white py-2 px-4 rounded"

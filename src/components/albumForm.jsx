@@ -66,7 +66,7 @@ const CreateAlbum = () => {
 
   return (
     <form
-      className="max-w-lg mx-auto bg-white p-6 rounded shadow-md space-y-6"
+      className="max-w-lg mx-auto bg-slate-400 mt-20 p-6 rounded shadow-md space-y-6"
       onSubmit={handleSubmit}
     >
       <h1 className="text-2xl font-bold text-center">Create Album</h1>

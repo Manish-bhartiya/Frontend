@@ -117,13 +117,13 @@ const AudioPlayer = () => {
   if (currentSongIndex === null || !songs[currentSongIndex]) return null;
 
   return (
-    <div className="fixed flex items-center bg-gradient-to-r from-gray-800 to-gray-600 bottom-0 left-0 right-0 p-4 rounded-t-lg shadow-lg z-50">
+    <div className="fixed flex items-center bg-gradient-to-r border-t-2 border-white from-black to-gray-600 bottom-0 left-0 right-0 p-4 rounded-t-lg shadow-lg z-50">
       {/* Song Image */}
       <div className="mr-4">
         <img
           src={songs[currentSongIndex].image}
           alt="Song cover"
-          className="w-16 h-16 object-cover rounded-lg shadow-md"
+          className="w-16 h-16 object-cover rounded-lg shadow-lg border-x-2"
         />
       </div>
 
@@ -174,7 +174,7 @@ const AudioPlayer = () => {
 
             {/* Progress Bar */}
             <div className="relative w-full h-1 bg-gray-500 rounded-full cursor-pointer" onClick={handleProgressClick}>
-              <div className="absolute top-0 left-0 h-full bg-emerald-400 rounded-full" style={{ width: `${progress}%` }}></div>
+              <div className="absolute top-0 left-0 h-full bg-white rounded-full" style={{ width: `${progress}%` }}></div>
             </div>
 
             {/* Duration */}

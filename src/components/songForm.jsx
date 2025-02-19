@@ -55,7 +55,7 @@ const SongUploadForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow-md">
+    <div className="max-w-md mt-20 flex flex-col  mx-auto p-6 bg-slate-400 rounded shadow-md">
       <h1 className="text-2xl font-bold mb-4">Upload a Song</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Song Name */}

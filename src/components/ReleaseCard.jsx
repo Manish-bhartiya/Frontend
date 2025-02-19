@@ -47,7 +47,7 @@ const ReleaseCard = ({ song = [] }) => {
             </p>
           </div>
           {/* Play/Pause Button */}
-          <button className="absolute right-3 p-2 rounded-full bg-emerald-400 opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <button className="absolute right-3 p-3 rounded-full bg-black opacity-0 group-hover:opacity-100 transition-all duration-300">
             {currentSongIndex === index && isPlaying ? <FaPause /> : <FaPlay />}
           </button>
         </div>

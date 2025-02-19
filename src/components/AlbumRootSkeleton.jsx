@@ -3,7 +3,7 @@ import Skeleton from 'react-loading-skeleton';
 
 const AlbumRootSkeleton = () => {
   return (
-      <div className="w-full opacity-40 flex flex-col backdrop-blur-3xl mx-0">
+      <div className="w-full opacity-40 flex flex-col backdrop-blur-3xl mx-0 mt-16">
           <div className="ml-2 mb-2">
               <Skeleton height={20} width={180} baseColor="gray" />
           </div>

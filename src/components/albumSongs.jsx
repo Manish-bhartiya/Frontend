@@ -12,7 +12,7 @@ import apiconnecter from "../services/apiconnecter";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import toast from "react-hot-toast";
 
-const AlbumSongs = ({ AlbumName }) => {
+const AlbumSongs = ({ AlbumName}) => {
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
   const currentSongId = useSelector((state) => state.audio.currentSongId);
@@ -127,7 +127,9 @@ const AlbumSongs = ({ AlbumName }) => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4">
+    <div className="min-h-screen mt-14 bg-black text-white px-4"
+    // style={{ backgroundImage: `url(${album.image})` }}
+    >
       <button onClick={() => navigate("/")} className="mb-4 text-white py-2 px-4 rounded">
         <IoMdArrowRoundBack />
       </button>

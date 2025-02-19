@@ -1,0 +1,25 @@
+@keyframes scanLight {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  .scanning-border {
+    position: relative;
+    overflow: hidden; /* Prevents the glow effect from overflowing */
+  }
+  
+  .scanning-border::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -100%; /* Start off-screen */
+    width: 100%;
+    height: 3px; /* Thickness of the glowing border */
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    animation: scanLight 2.5s linear infinite;
+  }
+  

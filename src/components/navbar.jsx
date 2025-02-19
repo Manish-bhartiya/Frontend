@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { IoSearchOutline } from "react-icons/io5";
-import Logout from './logout';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthUser } from '../features/authSlice';
-import { fetchResults, togglePage } from '../features/searchSlice';
-import SearchBar from './searchbar';
-import Userprofile from './userProfile';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { HiMenu, HiX } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuthUser } from "../features/authSlice";
+import { fetchResults, togglePage } from "../features/searchSlice";
+import SearchBar from "./searchbar";
+import Userprofile from "./userProfile";
 
 const Navbar = () => {
   const authUser = useSelector(selectAuthUser);
@@ -26,12 +25,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setSticky(window.scrollY > 0);
+      setSticky(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -49,93 +48,94 @@ const Navbar = () => {
     }
   };
 
-  const navItems = (
-    <>
-      <li className="p-2 border-white">
-        <Link to="/">Home</Link>
-      </li>
-      <li className="p-2">
-        <Link to="/Song">AddSong</Link>
-      </li>
-      <li className="p-2">
-        <Link to="/favorites">Favorites</Link>
-      </li>
-      <li className="p-2">
-        <Link to="/Album">Album</Link>
-      </li>
-    </>
-  );
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Add Song", path: "/Song" },
+    { name: "Favorites", path: "/favorites" },
+    { name: "Albums", path: "/Album" },
+  ];
 
   return (
-    <div className={`navbar bg-black border-b-2 border-white text-white ${sticky ? 'sticky top-0 z-50' : ''}`}>
-      <nav className="container mx-auto p-4 flex items-center justify-between">
-        {/* Mobile Dropdown Button */}
-        <div className="navbar-start flex items-center">
-          <div className="lg:hidden">
-            <button className="btn btn-ghost" onClick={toggleDropdown}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </button>
-          </div>
+    <div
+      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+        sticky ? "bg-black/90 shadow-lg backdrop-blur-md" : "bg-black"
+      }`}
+    >
+      <nav className="container mx-auto px-5 py-1 flex items-center justify-between border-b-2 border-white">
+        {/* Left: Logo & Mobile Menu */}
+        <div className="flex justify-start gap-3">
+          {/* Mobile Menu Button */}
+          <button
+            className="lg:hidden text-white text-2xl"
+            onClick={toggleDropdown}
+          >
+            {dropdownVisible ? <HiX /> : <HiMenu />}
+          </button>
 
-          {/* Logo */}
-          <Link to="/" className="font-extrabold block">
-            <img
-              src="https://res.cloudinary.com/dhfjy459o/image/upload/v1722677369/logo_2-removebg-preview_nwfo5w.png"
-              alt="Logo"
-              className="h-12 lg:h-16"
-            />
-          </Link>
+          {/* Logo with animation */}
+          <Link to="/" className="font-extrabold block animate-logo">
+  <img
+    src="https://res.cloudinary.com/dhfjy459o/image/upload/v1722677369/logo_2-removebg-preview_nwfo5w.png"
+    alt="Logo"
+    className="h-10 sm:h-12 lg:h-14 transition-all duration-500 ease-in-out transform hover:shadow-xl hover:border-2 hover:border-blue-500/30 hover:rounded-lg animate-pulse"
+  />
+</Link>
         </div>
 
-        {/* Search Bar */}
-        <div className={`flex-grow ${dropdownVisible ? 'hidden' : 'block'} lg:block`}>
+        {/* Center: Search Bar (Always Visible) */}
+        <div className="flex-grow flex justify-center">
           <SearchBar />
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        {dropdownVisible && (
-          <ul className="flex lg:hidden flex-col items-center absolute top-16 left-0 w-full bg-black text-white py-4 space-y-2">
-            {navItems}
+        {/* Right: User Profile (Always Visible) */}
+        <div className="flex items-center gap-4">
+          {/* Desktop Navigation */}
+          <ul className="hidden lg:flex gap-6 text-white text-lg">
+            {navItems.map((item) => (
+              <li
+                key={item.name}
+                className="text-white px-2 py-1 rounded-md font-semibold text-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-110 border-x-2 border-white"
+                >
+                <Link to={item.path}>{item.name}</Link>
+              </li>
+            ))}
           </ul>
-        )}
 
-        {/* Desktop Menu */}
-        <div className="navbar-end hidden lg:flex items-center gap-4">
-          <ul className="menu flex gap-10">{navItems}</ul>
-        </div>
-
-        {/* User Profile */}
-        <div className="p-2 lg:p-0">
+          {/* User Profile (Always Visible) */}
           {authUser ? (
-            <Userprofile />  
+            <Userprofile />
           ) : (
-            <div className="p-2">
-              <Link
-                to="/signin"
-                className="bg-black text-white p-2 rounded-md hover:bg-slate-800 duration-150 cursor-pointer"
-              >
-                Signin
-              </Link>
-            </div>
+            <Link
+              to="/signin"
+              className="text-white px-2 py-1 rounded-md font-semibold text-lg shadow-md hover:shadow-xl transition-all duration-300 hover:scale-110 border-x-2 border-white"
+            >
+              Sign In
+            </Link>
           )}
         </div>
       </nav>
+
+      {/* Mobile Dropdown Menu with Transition */}
+      <div
+        className={`lg:hidden bg-black text-white absolute  left-0 w-72 h-screen p-5 shadow-lg rounded-b-lg transform transition-transform duration-300 ease-in-out ${
+          dropdownVisible ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <ul className="flex flex-col gap-4 text-center text-lg">
+          {navItems.map((item) => (
+            <li
+              key={item.name}
+              className="hover:text-gray-400 transition duration-200"
+            >
+              <Link to={item.path} onClick={toggleDropdown}>
+                {item.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
 
 export default Navbar;
-  

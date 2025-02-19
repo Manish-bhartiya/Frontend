@@ -24,7 +24,7 @@ function Cart() {
           <main>
               <section>
                   <div>
-                      <h1 className="text-white text-3xl mb-6">Artists</h1>
+                      <h1 className="text-white text-2xl mb-4 border-b-2 border-white inline-block">Artists</h1>
                       {playlistStatus === "loading" ? (
                           <Swiper
                               spaceBetween={10}

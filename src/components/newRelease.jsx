@@ -104,12 +104,11 @@ const NewReleasesSlider = () => {
           <AlbumRootSkeleton/>
         </div>
       ) : (
-        <div className="mb-[10px]">
+        <div className="mb-[10px] mt-20 ml-2">
           <div className="flex items-start ml-3 flex-col text-white"></div>
+          <h1 className="text-white text-2xl mb-4 border-b-2 border-white inline-block">New Release</h1>
           <div className="flex flex-col gap-2">
-            <h1 className="text-gray-300 mt-2 ml-2 text-xl font-bold">
-              {tracks.length > 0 && "Songs"}
-            </h1>
+
             {chunks.length > 0 ? (
               <Swiper
                 slidesPerView={card}

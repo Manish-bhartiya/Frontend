@@ -8,7 +8,7 @@ import "swiper/css/bundle";
 import { MDBCard, MDBCardBody, MDBCardImage } from "mdb-react-ui-kit";
 import AlbumRootSkeleton from "../components/AlbumRootSkeleton"; // Importing Skeleton component
 
-function Album() {
+function Bollywood() {
   const dispatch = useDispatch();
   const allAlbums = useSelector((state) => state.album.allAlbums);
   const albumStatus = useSelector((state) => state.album.status);
@@ -24,8 +24,7 @@ function Album() {
       <main>
         <section className="p-4">
           <div>
-          <h1 className="text-white text-2xl mb-4 border-b-2 border-white inline-block">Top Albums</h1>
-
+            <h1 className="text-white text-2xl mb-4 border-b-2 border-white inline-block">Bollywood & Indian</h1>
             {albumStatus === "loading" ? (
               <AlbumRootSkeleton /> // Show skeleton loader while loading
             ) : (
@@ -77,4 +76,4 @@ function Album() {
   );
 }
 
-export default Album;
+export default Bollywood;

@@ -6,6 +6,7 @@ import LeftSection from "../components/leftsection";
 import Navbar from "./navbar";
 import FavoriteSongs from "./favorites";
 import NewReleasesSlider from "./newRelease";
+import Bollywood from "./Bollywood_&_Indian";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
     </div> */}
        <NewReleasesSlider/>
         <Album />
+        <Bollywood/>
         <Cart />
       </div>
     </div>
