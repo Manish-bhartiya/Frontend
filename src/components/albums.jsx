@@ -30,6 +30,7 @@ function Album() {
               <AlbumRootSkeleton /> // Show skeleton loader while loading
             ) : (
               <Swiper
+                loop={true}
                 spaceBetween={10}
                 slidesPerView={2}
                 breakpoints={{
@@ -42,7 +43,7 @@ function Album() {
                     spaceBetween: 15,
                   },
                   1024: {
-                    slidesPerView: 5,
+                    slidesPerView: 6,
                     spaceBetween: 30,
                   },
                 }}

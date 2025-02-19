@@ -41,8 +41,8 @@ function Bollywood() {
                     spaceBetween: 15,
                   },
                   1024: {
-                    slidesPerView: 5,
-                    spaceBetween: 30,
+                    slidesPerView: 6,
+                    spaceBetween: 0,
                   },
                 }}
                 onSlideChange={() => console.log("slide change")}

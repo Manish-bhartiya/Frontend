@@ -20,6 +20,8 @@ import AlbumSongs from "./components/albumSongs";
 import SongUploadForm from "./components/songForm";
 import CreateAlbum from "./components/albumForm";
 import DigitalPlayer from "./components/digitalPlayer";
+import AllSongsPage from "./components/Allsongs";
+import AllArtistsPage from "./components/AllArtists";
 // import AudioPlayer from "./components/AudioPlayer";
 // import { SidebarDemo } from "./components/sidebar";  
 
@@ -47,6 +49,9 @@ const App = () => {
               <Route path="/profile" element={<Userprofile />} />
               <Route path="/Song" element={<SongUploadForm />} />
               <Route path="/Album" element={<CreateAlbum />} />
+              <Route path="/Allsongs" element={<AllSongsPage />}/>
+              <Route path="/AllArtists" element={<AllArtistsPage />}/>
+
             </Routes>
           )}
           {/* Render AudioPlayer component to handle audio playback */}

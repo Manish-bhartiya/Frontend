@@ -79,7 +79,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-900">
+    <div className="flex relative mt-9 justify-center min-h-screen bg-gray-900">
       <div className="bg-gray-800 bg-opacity-90 flex flex-col justify-center p-10 mt-14 rounded-lg shadow-lg" style={{ height: '650px' }}>
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-100">Sign Up</h2>

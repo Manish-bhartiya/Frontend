@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
-import { FaRegHeart, FaHeart } from "react-icons/fa"; // Updated import
-
+import { FaHeart } from "react-icons/fa";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { setSongs, setCurrentSongIndex, togglePlayPause } from "../features/audioSlice";
-import  apiconnecter  from "../services/apiconnecter";
+import apiconnecter from "../services/apiconnecter";
 
 const FavoriteSongs = () => {
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
-
   const [favoriteSongs, setFavoriteSongs] = useState([]);
   const [songId, setSongId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavoriteSongs = async () => {
@@ -26,7 +26,6 @@ const FavoriteSongs = () => {
           toast.error("User not found. Please log in again.");
           return;
         }
-
         const response = await apiconnecter('get', `users/getFavorites?userId=${user._id}`);
         setFavoriteSongs(response.data.favoriteSongs);
         dispatch(setSongs(response.data.favoriteSongs));
@@ -37,7 +36,6 @@ const FavoriteSongs = () => {
         setLoading(false);
       }
     };
-
     fetchFavoriteSongs();
   }, [dispatch]);
 
@@ -49,77 +47,57 @@ const FavoriteSongs = () => {
 
   const removeSongFromFavorites = async (_id) => {
     try {
-      // Fetch user data from localStorage
       const user = JSON.parse(localStorage.getItem("Users"));
-      
       if (user && user._id) {
         const userId = user._id;
-        console.log(`Removing song with ID: ${_id} for user ID: ${userId}`);
-    
-        // Call the API to remove the song from the favorites
-        await apiconnecter('delete', 'users/removeFavorite', {
-          songId: _id, userId: userId // Pass data in the 'data' field
-        });
-  
-        // Update the local state by removing the song from the list
-        setFavoriteSongs((prevSong) =>
-          prevSong.filter((song) => song._id !== _id)
-        );
-  
-        // Show success message
+        await apiconnecter('delete', 'users/removeFavorite', { songId: _id, userId });
+        setFavoriteSongs((prevSongs) => prevSongs.filter((song) => song._id !== _id));
         toast.success("Song removed from favorites successfully");
       } else {
         setError("User not found. Please login again.");
       }
     } catch (error) {
-      // Log specific error message for debugging
       console.error("Error removing song from favorites:", error.response ? error.response.data : error.message);
-  
-      // Display error to the user
       setError("Failed to remove from favorites!");
     }
   };
-  
-  
-  
 
   if (loading) return <div className="text-center mt-8">Loading...</div>;
-  if (error) return <div className="text-center mt-8">{error}</div>;
+  if (error) return <div className="text-center mt-8 text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-900 p-5 text-white">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-4">Your Favorite Songs</h2>
+    <div className="flex flex-col mt-16 z-10 items-center mb-4 bg-gray-900 min-h-screen">
+      <div className="flex flex-col items-center gap-6 p-4 relative w-full text-white">
+        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 text-white">
+          <IoMdArrowRoundBack size={24} />
+        </button>
+        <h2 className="text-3xl font-bold">Your Favorite Songs</h2>
       </div>
-      <div className="w-full max-w-3xl mx-auto">
-        <ul className="bg-black overflow-y-scroll border rounded-lg max-h-[60vh]">
+      <div className="w-full max-w-3xl mx-auto bg-gray-800 p-5 rounded-lg">
+        <div className="w-full border-b border-white/20 pb-4 mb-4">
+          <div className="flex justify-between text-gray-300 text-sm font-bold">
+            <span className="w-[50%]">Title</span>
+            <span className="w-[30%] text-right">Artist</span>
+            <span className="w-[20%] text-right">Favorite</span>
+          </div>
+        </div>
+        <ul className="w-full space-y-2">
           {favoriteSongs.length > 0 ? (
             favoriteSongs.map((song, index) => (
-              <li
-                key={song._id}
-                className="flex shadow-md rounded-lg p-4 hover:bg-gray-700 transition duration-300 cursor-pointer"
-                onClick={() => handleSongClick(index, song._id)}
-              >
-                <p
-                  className={`flex-1 text-lg font-semibold mb-2 ${
-                    songId === song._id ? "text-gray-500" : "text-white"
-                  }`}
-                >
-                  {index + 1}. {song.name}
-                </p>
-                <p className="flex-1 text-right pr-4 text-white md:text-lg">
-                  {song.artist}
-                </p>
-                <FaHeart
-                  className="cursor-pointer text-red-500 hover:text-red-600 transition-colors duration-200"
-                  onClick={() => removeSongFromFavorites(song._id)}
-                />
+              <li key={song._id} onClick={() => handleSongClick(index, song._id)}
+                  className={`flex items-center justify-between p-3 rounded-lg hover:bg-white/10 cursor-pointer ${songId === song._id ? "bg-white/20" : ""}`}>
+                <div className="w-[50%] font-medium text-white">{song.name}</div>
+                <div className="w-[30%] text-right text-white">{song.artist}</div>
+                <div className="w-[20%] flex justify-end items-center">
+                  <button onClick={(e) => { e.stopPropagation(); removeSongFromFavorites(song._id); }}
+                          className="text-red-500 hover:scale-110 transition">
+                    <FaHeart />
+                  </button>
+                </div>
               </li>
             ))
           ) : (
-            <p className="text-gray-400 text-center p-4">
-              You have no favorite songs yet.
-            </p>
+            <p className="text-gray-400 text-center p-4">You have no favorite songs yet.</p>
           )}
         </ul>
       </div>
