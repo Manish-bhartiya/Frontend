@@ -52,10 +52,10 @@ function Album() {
                 {Array.isArray(allAlbums) &&
                   allAlbums.map((album) => (
                     <SwiperSlide key={album._id}>
-                      <MDBCard className="bg-black shadow-white flex flex-col justify-center items-center hover:shadow-xl">
+                      <MDBCard className="bg-black  flex flex-col justify-center items-center hover:shadow-xl">
                         <Link to={`/app/${album.name}`} className="text-center">
                           <MDBCardImage
-                            className="rounded-md sm:size-72 lg:size-40 opacity-90 transition-opacity duration-300 hover:opacity-50"
+                            className="rounded-md border-x-2 border-white shadow-white shadow-md  sm:size-72 lg:size-40 opacity-90 transition-opacity duration-300 hover:opacity-50"
                             src={album.image}
                             alt={`${album.name} cover`}
                           />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaHeart, FaRegHeart, FaPlay } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,8 +9,7 @@ import {
   togglePlayPause,
   setCurrentSongId,
 } from "../features/audioSlice";
-import  apiconnecter  from "../services/apiconnecter";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import apiconnecter from "../services/apiconnecter";
 import toast from "react-hot-toast";
 
 // Utility function to get user from localStorage
@@ -23,19 +23,21 @@ const getUserFromLocalStorage = () => {
 };
 
 const PlaylistSongs = ({ playlistName }) => {
+  const currentSongId = useSelector((state) => state.audio.currentSongId);
   const currentSongIndex = useSelector((state) => state.audio.currentSongIndex);
   const isPlaying = useSelector((state) => state.audio.isPlaying);
-  const currentSongId = useSelector((state) => state.audio.currentSongId);
 
   const [playlist, setPlaylist] = useState(null);
   const [playlistsongs, setPlaylistsongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
+  const [playAll, setPlayAll] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Fetch favorite songs
   useEffect(() => {
     const fetchFavoriteSongs = async () => {
       try {
@@ -44,7 +46,6 @@ const PlaylistSongs = ({ playlistName }) => {
           "get",
           `users/getFavorites?userId=${user._id}`
         );
-
         if (response?.data?.favoriteSongs) {
           setFavoriteSongs(response.data.favoriteSongs);
         } else {
@@ -57,155 +58,177 @@ const PlaylistSongs = ({ playlistName }) => {
         setLoading(false);
       }
     };
-
     fetchFavoriteSongs();
   }, []);
 
+  // Fetch playlist and songs; if a song is already selected, preserve it
   useEffect(() => {
-    // Fetch the playlist and songs as usual
     const fetchPlaylistAndSongs = async () => {
       try {
         const response = await apiconnecter("get", `playlists/${playlistName}`);
         const { playlist: playlistData, songs: songsData } = response.data;
-        
         setPlaylist(playlistData);
         setPlaylistsongs(songsData);
-        
-        // Dispatch songs to Redux
         dispatch(setSongs(songsData));
-        
-        // Keep playing the current song if it's already selected
+
         if (currentSongId) {
           dispatch(setCurrentSongId(currentSongId));
           dispatch(setCurrentSongIndex(currentSongIndex));
         }
       } catch (error) {
-        setError("Error fetching playlist and songs.");
-        console.error("Error fetching playlist and songs:", error);
+        setError("Error fetching playlist");
+        console.error(error);
       } finally {
         setLoading(false);
       }
     };
-  
     if (playlistName) {
       fetchPlaylistAndSongs();
     }
   }, [playlistName, dispatch, currentSongId, currentSongIndex]);
 
-  // Memoized isFavorite function for optimization
+  // Memoized favorite check
   const isFavorite = useMemo(
     () => (_id) => favoriteSongs.some((fav) => fav._id === _id),
     [favoriteSongs]
   );
 
+  // Song click handler: if the song is already playing, do nothing
   const handleSongClick = (index, _id) => {
-    // If the song clicked is the same as the current song, don't stop or reset
-    if (_id === currentSongId) {
-      return; // Don't do anything if the same song is clicked again
-    }
-  
-    dispatch(setCurrentSongId(_id)); // Set new song ID
-    // dispatch(setCurrentSongIndex(index)); // Set the song index
-    if (!isPlaying) dispatch(togglePlayPause(true)); // Play the song if it's not already playing
+    if (_id === currentSongId) return;
+    dispatch(setCurrentSongId(_id));
+    // Not updating currentSongIndex on click as per the updated functionality
+    if (!isPlaying) dispatch(togglePlayPause(true));
   };
-  
 
+  // Toggle favorite status for a song
   const toggleFavorite = async (_id) => {
     try {
       const user = getUserFromLocalStorage();
-
       if (isFavorite(_id)) {
         await apiconnecter("delete", "users/removeFavorite", {
           songId: _id,
           userId: user._id,
         });
-        setFavoriteSongs((prev) =>
-          prev.filter((favSong) => favSong._id !== _id)
-        );
-        toast.success("Song removed from favorites.");
+        setFavoriteSongs((prev) => prev.filter((fav) => fav._id !== _id));
+        toast.success("Removed from favorites");
       } else {
         await apiconnecter("post", "users/addFavorite", {
           songId: _id,
           userId: user._id,
         });
         setFavoriteSongs((prev) => [...prev, { _id }]);
-        toast.success("Song added to favorites.");
+        toast.success("Added to favorites");
       }
     } catch (error) {
-      console.error("Error toggling favorite status:", error);
-      toast.error("Failed to update favorite status.");
+      toast.error("Failed to update favorites");
+      console.error(error);
     }
   };
 
-  if (loading) {
-    return <div className="text-center mt-8">Loading...</div>;
-  }
+  // Play all songs functionality
+  const handlePlayAll = () => {
+    if (playlistsongs.length > 0) {
+      dispatch(setCurrentSongId(playlistsongs[0]._id));
+      dispatch(setCurrentSongIndex(0));
+      dispatch(togglePlayPause(true));
+      setPlayAll(true);
+    }
+  };
 
-  if (error) {
-    return <div className="text-center mt-8">{error}</div>;
-  }
+  if (loading)
+    return <div className="text-center p-8">Loading...</div>;
+  if (error)
+    return (
+      <div className="text-center p-8 text-red-500">{error}</div>
+    );
 
   return (
-    <div className="min-h-screen mt-16 bg-black text-white px-4">
-      <button
-        onClick={() => navigate("/")}
-        className="mb-4 text-white py-2 px-4 rounded"
-      >
-        <IoMdArrowRoundBack />
-      </button>
+    <div
+      className="flex flex-col mt-16 z-10 items-center mb-4 bg-cover bg-no-repeat relative"
+      style={{ backgroundImage: `url(${playlist?.image})` }}
+    >
+      <div className="absolute inset-0 backdrop-blur-3xl bg-black/60" />
 
-      <div className="max-w-5xl mx-auto">
-        {/* Playlist Info */}
-        <div className="text-center mb-8">
-          {playlist && (
-            <>
-              <img
-                src={playlist.image}
-                alt={playlist.name}
-                className="w-40 h-40 sm:size-80 mx-auto shadow-lg mb-4 object-cover rounded-full"
-              />
-              <h2 className="text-2xl sm:text-3xl font-bold">{playlist.name}</h2>
-            </>
-          )}
+      <div className="flex flex-col lg:flex-row h-[400px] lg:h-[300px] items-center gap-6 backdrop-blur-3xl p-4 relative w-full">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 text-white z-20"
+        >
+          <IoMdArrowRoundBack size={24} />
+        </button>
+
+        <img
+          src={playlist?.image}
+          alt={playlist?.name}
+          className="w-[200px] h-[200px] lg:w-[250px] lg:h-[230px] shadow-2xl rounded-md"
+        />
+
+        <div className="flex flex-col text-white z-10 mt-4 lg:mt-0">
+          <span className="text-xs font-bold mb-2">Playlist</span>
+          <h1 className="text-3xl lg:text-5xl font-bold mb-4">
+            {playlist?.name}
+          </h1>
+          <span className="text-sm font-bold">
+            {playlistsongs.length} songs
+          </span>
         </div>
+      </div>
 
-        {/* Playlist Songs */}
-        <ul className="bg-black overflow-y-scroll md:size-auto border border-gray-700 max-h-[70vh] rounded-lg">
-          {playlistsongs.map((song, index) => (
-            <li
-              key={song._id}
-              className={`flex items-center justify-between p-4 hover:bg-gray-700 transition duration-300 cursor-pointer ${
-                currentSongId === song._id ? "bg-gray-800" : "bg-black"
-              }`}
-              onClick={() => handleSongClick(index, song._id)}
+      <div className="w-full backdrop-blur-3xl bg-gradient-to-b from-transparent to-black/90">
+        <div className="flex flex-col items-center justify-between p-4 w-full">
+          <div className="w-full flex items-center gap-4 mb-6">
+            <button
+              onClick={handlePlayAll}
+              className="bg-slate-400 rounded-full p-4 hover:scale-95 transition"
             >
-              <p
-                className={`flex-1  sm:text-3xl lg:text-lg font-semibold mb-2 ${
-                  currentSongId === song._id
-                    ? "text-gray-500"
-                    : "text-white"
+              <FaPlay className="text-white" />
+            </button>
+            <span className="text-white font-bold">Play All</span>
+          </div>
+
+          {/* Header with three columns */}
+          <div className="w-full border-b border-white/20 pb-4 mb-4">
+            <div className="flex justify-between text-gray-300 text-sm font-bold">
+              <span className="w-[50%]">Title</span>
+              <span className="w-[30%] text-right">Artist</span>
+              <span className="w-[20%] text-right">Favorite</span>
+            </div>
+          </div>
+
+          {/* Song Rows */}
+          <div className="w-full space-y-2">
+            {playlistsongs.map((song, index) => (
+              <div
+                key={song._id}
+                onClick={() => handleSongClick(index, song._id)}
+                className={`flex items-center justify-between p-3 rounded-lg hover:bg-white/10 cursor-pointer ${
+                  currentSongId === song._id ? "bg-white/20" : ""
                 }`}
               >
-                {index + 1}. {song.name}
-              </p>
-
-              <p className="flex-1 text-right pr-4 sm:text-3xl lg:text-lg text-white">
-                {song.artist}
-              </p>
-              {isFavorite(song._id) ? (
-                <FaHeart
-                  className="cursor-pointer"
-                  onClick={() => toggleFavorite(song._id)}
-                />
-              ) : (
-                <FaRegHeart
-                  className="cursor-pointer sm:size-5"
-                  onClick={() => toggleFavorite(song._id)}
-                />
-              )}
-            </li>
-          ))}
-        </ul>
+                <div className="w-[50%] font-medium text-white">{song.name}</div>
+                <div className="w-[30%] text-right text-white">
+                  {song.artist}
+                </div>
+                <div className="w-[20%] flex justify-end items-center">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(song._id);
+                    }}
+                    className="text-red-500 hover:scale-110 transition"
+                  >
+                    {isFavorite(song._id) ? (
+                      <FaHeart />
+                    ) : (
+                      <FaRegHeart />
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

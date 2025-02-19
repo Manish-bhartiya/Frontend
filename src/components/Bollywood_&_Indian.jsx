@@ -24,7 +24,7 @@ function Bollywood() {
       <main>
         <section className="p-4">
           <div>
-            <h1 className="text-white text-2xl mb-4 border-b-2 border-white inline-block">Bollywood & Indian</h1>
+            <h1 className="text-white text-2xl mb-4">Bollywood & Indian</h1>
             {albumStatus === "loading" ? (
               <AlbumRootSkeleton /> // Show skeleton loader while loading
             ) : (
@@ -54,7 +54,7 @@ function Bollywood() {
                       <MDBCard className="bg-black shadow-white flex flex-col justify-center items-center hover:shadow-xl">
                         <Link to={`/app/${album.name}`} className="text-center">
                           <MDBCardImage
-                            className="rounded-md sm:size-72 lg:size-40 opacity-90 transition-opacity duration-300 hover:opacity-50"
+                            className="rounded-md border-x-2 border-white shadow-white shadow-md sm:size-72 lg:size-40 opacity-90 transition-opacity duration-300 hover:opacity-50"
                             src={album.image}
                             alt={`${album.name} cover`}
                           />

@@ -73,11 +73,11 @@ const Navbar = () => {
           </button>
 
           {/* Logo with animation */}
-          <Link to="/" className="font-extrabold block animate-logo">
+          <Link to="/" className="font-extrabold block animate-logo ">
   <img
     src="https://res.cloudinary.com/dhfjy459o/image/upload/v1722677369/logo_2-removebg-preview_nwfo5w.png"
     alt="Logo"
-    className="h-10 sm:h-12 lg:h-14 transition-all duration-500 ease-in-out transform hover:shadow-xl hover:border-2 hover:border-blue-500/30 hover:rounded-lg animate-pulse"
+    className="h-10 sm:h-12 lg:h-14 transition-all duration-500 ease-in-out  transform hover:shadow-xl hover:border-2 hover:border-blue-500/30 hover:rounded-lg animate-pulse"
   />
 </Link>
         </div>
@@ -90,7 +90,7 @@ const Navbar = () => {
         {/* Right: User Profile (Always Visible) */}
         <div className="flex items-center gap-4">
           {/* Desktop Navigation */}
-          <ul className="hidden lg:flex gap-6 text-white text-lg">
+          <ul className="hidden lg:flex gap-6 text-white text-lg ">
             {navItems.map((item) => (
               <li
                 key={item.name}

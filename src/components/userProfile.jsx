@@ -31,7 +31,7 @@ const Userprofile = () => {
             "https://via.placeholder.com/150" // Fallback in case no profile pic is available
           }
           alt="User profile"
-          className="w-10 h-10 rounded-full"
+          className="w-10 h-10 rounded-full border-x-2 border-slate-400 shadow-lg"
         />
       </div>
 

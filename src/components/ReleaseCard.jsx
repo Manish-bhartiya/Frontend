@@ -38,7 +38,7 @@ const ReleaseCard = ({ song = [] }) => {
           <img
             src={track.image || "/default-image.png"}
             alt={track.name || "Unknown Title"}
-            className="w-10 h-10 lg:w-16 lg:h-16 md:w-16 md:h-16 rounded-md mr-4"
+            className="w-10 h-10 lg:w-16 lg:h-16 md:w-16 md:h-16 rounded-md mr-4 border-x-2 border-white shadow-slate-500 shadow-md "
           />
           <div className="flex-1 flex-wrap">
             <h4 className="font-bold text-sm md:text-md lg:text-md">{track.name || "Unknown Title"}</h4>
@@ -47,7 +47,7 @@ const ReleaseCard = ({ song = [] }) => {
             </p>
           </div>
           {/* Play/Pause Button */}
-          <button className="absolute right-3 p-3 rounded-full bg-black opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <button className="absolute right-3 p-3 rounded-full border-2 border-white  shadow-md  bg-black opacity-0 group-hover:opacity-100 transition-all duration-300">
             {currentSongIndex === index && isPlaying ? <FaPause /> : <FaPlay />}
           </button>
         </div>
